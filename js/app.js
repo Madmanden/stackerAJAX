@@ -1,3 +1,22 @@
+$(document).ready(function() {
+  $('.unanswered-getter').submit(function(e) {
+    e.preventDefault();
+    // zero out results if previous search has run
+    $('.results').html('');
+    // get the value of the tags the user submitted
+    var tags = $(this).find("input[name='tags']").val();
+    getUnanswered(tags);
+  });
+  $('.inspiration-getter').submit(function(e) {
+    e.preventDefault();
+    // zero out results if previous search has run
+    $('.results').html('');
+    // get the value of the tags the user submitted
+    var tags = $(this).find("input[name='answerers']").val();
+    getTop(tags);
+  });
+});
+
 // this function takes the question object returned by the StackOverflow request
 // and returns new result to be appended to DOM
 var showQuestion = function(question) {
@@ -21,9 +40,7 @@ var showQuestion = function(question) {
 
   // set some properties related to asker
   var asker = result.find('.asker');
-  asker.html('<p>Name: <a target="_blank" ' +
-    'href=http://stackoverflow.com/users/' + question.owner.user_id + ' >' +
-    question.owner.display_name +
+  asker.html('<p>Name: <a target="_blank" ' + 'href=http://stackoverflow.com/users/' + question.owner.user_id + ' >' + question.owner.display_name +
     '</a></p>' +
     '<p>Reputation: ' + question.owner.reputation + '</p>'
   );
@@ -31,6 +48,16 @@ var showQuestion = function(question) {
   return result;
 };
 
+var showAnswerer = function(item) {
+  //clone our result template code
+  var result = $('.templates').find('.user').clone();
+
+  //set the format display_name Score: score
+  var a = result.find('a');
+  a.attr('href', item.user.link);
+  a.text(item.user.display_name + " Score: " + item.score);
+  return result;
+}
 
 // this function takes the results object from StackOverflow
 // and returns the number of results and tags to be appended to DOM
@@ -58,7 +85,7 @@ var getUnanswered = function(tags) {
     sort: 'creation'
   };
 
-  $.ajax({
+  var result = $.ajax({
       url: "http://api.stackexchange.com/2.2/questions/unanswered",
       data: request,
       dataType: "jsonp", //use jsonp to avoid cross origin issues
@@ -81,14 +108,31 @@ var getUnanswered = function(tags) {
     });
 };
 
+var getTop = function(tag) {
+  //need to get all questions
+  var url = "http://api.stackexchange.com/2.2/tags/" + tag + "/top-answerers/all_time";
+  var request = {
+    site: 'stackoverflow',
+  };
 
-$(document).ready(function() {
-  $('.unanswered-getter').submit(function(e) {
-    e.preventDefault();
-    // zero out results if previous search has run
-    $('.results').html('');
-    // get the value of the tags the user submitted
-    var tags = $(this).find("input[name='tags']").val();
-    getUnanswered(tags);
-  });
-});
+  var result = $.ajax({
+      url: url,
+      data: request,
+      dataType: "jsonp",
+      type: "GET",
+    })
+    .done(function(result) {
+      var searchResults = showSearchResults(tag, result.items.length);
+
+      $('.search-results').html(searchResults);
+
+      $.each(result.items, function(i, item) {
+        var answerer = showAnswerer(item);
+        $('.results').append(answerer);
+      });
+    })
+    .fail(function(jqXHR, error, errorThrown) {
+      var errorElem = showError(error);
+      $('.search-results').append(errorElem);
+    });
+}

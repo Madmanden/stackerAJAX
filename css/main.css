@@ -1,51 +1,51 @@
 body {
-	font-size: 130%;
+  font-size: 130%;
 }
 
 .container {
-	margin: 3em auto;
-	width: 600px;
+  margin: 3em auto;
+  width: 600px;
 }
 
 .hidden {
-	display: none;
+  display: none;
 }
 
 .left {
-	float: left;
+  float: left;
 }
 
 .stack-image {
-	margin-right: 1em;
-	width: 200px;
-	height: 200px;
-	border-radius: 5px;
-	background: url('../images/stack-icon.png') no-repeat center center;
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
+  margin-right: 1em;
+  width: 200px;
+  height: 200px;
+  border-radius: 5px;
+  background: url('../images/stack-icon.png') no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 .intro {
-	margin-bottom: 1em;
+  margin-bottom: 1em;
 }
 
 .stack {
-	clear: both;
+  clear: both;
 }
 
 .inspiration {
-	margin-left: 3em;
+  margin-left: 3em;
 }
 
 .result {
-	margin: 0 auto 1em auto;
-	padding: 5px;
-	border: 1px solid black;
+  margin: 1em auto 1em auto;
+  padding: 10px;
+  border: 1px solid black;
 }
 
 .error {
-	padding: 1em;
-	background-color: #F78181;
-}3
+  padding: 1em;
+  background-color: #F78181;
+}
